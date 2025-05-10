@@ -22,15 +22,10 @@ namespace EnemySystem
 
             foreach (Collider2D hitObject in hitObjects)
             {
-                Debug.Log(hitObject);
                 if (hitObject.TryGetComponent(out ITarget target))
                 {
                     target.DealDamage(_parameters.AttackDamage);
-                    Debug.Log(target);
-                    // To add sounds
-                    //_references.AttackingSource.PlayOneShot(_references.AttackingClip);
-
-                    break;
+                    _references.AttackingSource.PlayOneShot(_references.AttackingClip);
                 }
             }
         }

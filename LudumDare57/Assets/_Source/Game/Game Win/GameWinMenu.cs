@@ -6,23 +6,32 @@ namespace GameSystem
 {
     public class GameWinMenu : AMenu
     {
-        [SerializeField] private Button restartGameButton;
+        [SerializeField] private Button nextButton;
+        [SerializeField] private Button quitButton;
 
-        public event Action OnRestartButtonClicked;
+        public event Action OnNextButtonClicked;
+        public event Action OnQuitButtonClicked;
 
         protected override void OnMenuOpened()
         {
-            restartGameButton.onClick.AddListener(InvokeRestartButtonEvent);
+            nextButton.onClick.AddListener(InvokeNextButtonEvent);
+            quitButton.onClick.AddListener(InvokeQuitButtonEvent);
         }
 
         protected override void OnMenuclosed()
         {
-            restartGameButton.onClick.RemoveListener(InvokeRestartButtonEvent);
+            nextButton.onClick.RemoveListener(InvokeNextButtonEvent);
+            quitButton.onClick.RemoveListener(InvokeQuitButtonEvent);
         }
 
-        private void InvokeRestartButtonEvent()
+        private void InvokeNextButtonEvent()
         {
-            OnRestartButtonClicked?.Invoke();
+            OnNextButtonClicked?.Invoke();
+        }
+
+        private void InvokeQuitButtonEvent()
+        {
+            OnQuitButtonClicked?.Invoke();
         }
     }
 }

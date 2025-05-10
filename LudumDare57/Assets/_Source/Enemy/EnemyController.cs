@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using PerceptionSystem;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 namespace EnemySystem
 {
@@ -11,13 +14,22 @@ namespace EnemySystem
         [SerializeField] private EnemyMovement enemyMovement;
 
         // Perception
-        private readonly List<PercievedObject> _percievedObjects = new();
-        private PercievedObject _currentPercievedObject;
+        private readonly HashSet<APercievedObject> _percievedObjects = new();
+        private APercievedObject _currentPercievedObject;
 
         // Weapon
         [Space]
         [SerializeField] private MeleeWeapon.WeaponReferences weaponReferences;
         [SerializeField] private MeleeWeapon.WeaponParameters weaponParameters;
+
+        [Space]
+        [SerializeField] private AudioSource effectsSource;
+        [SerializeField] private AudioClip alertSound;
+
+        [Space]
+        [SerializeField] private List<Light2D> lights = new();
+        [SerializeField] private Color defaultColor;
+        [SerializeField] private Color alertColor;
 
         private MeleeWeapon _weapon;
 
@@ -39,7 +51,7 @@ namespace EnemySystem
 
             if (_currentPercievedObject == null && _percievedObjects.Count > 0)
             {
-                _currentPercievedObject = _percievedObjects[0];
+                _currentPercievedObject = _percievedObjects.ToArray()[0];
             }
 
             if (_currentPercievedObject != null)
@@ -50,14 +62,35 @@ namespace EnemySystem
             _weapon.Use();
         }
 
-        public void StartPercieving(PercievedObject percievedObject)
+        public void StartPercieving(APercievedObject percievedObject)
         {
-            _percievedObjects.Add(percievedObject);
+            if (_percievedObjects.Add(percievedObject))
+            {
+                PlayAlertEffects();
+            }
         }
 
-        public void StopPercieving(PercievedObject percievedObject)
+        public void StopPercieving(APercievedObject percievedObject)
         {
             _percievedObjects.Remove(percievedObject);
+        }
+
+        private void PlayAlertEffects()
+        {
+            effectsSource.PlayOneShot(alertSound);
+
+            foreach (var light in lights)
+            {
+                light.color = alertColor;
+            }
+        }
+
+        private void CancelAlertEffects()
+        {
+            foreach (var light in lights)
+            {
+                light.color = defaultColor;
+            }
         }
 
         private void SelectNextTarget()
@@ -65,6 +98,7 @@ namespace EnemySystem
             if (_currentPercievedObject != null)
                 return;
 
+            CancelAlertEffects();
             _currentRouteIndex++;
 
             if (_currentRouteIndex >= route.Count)

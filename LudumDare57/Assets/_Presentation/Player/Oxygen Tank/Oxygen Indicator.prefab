@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 0.25
   m_LightVolumeIntensityEnabled: 1
-  m_ApplyToSortingLayers: 29047a0c00000000bbda9350
+  m_ApplyToSortingLayers: 29047a0c00000000bbda93504795b249
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 894686223212208131}
   - component: {fileID: 6001605063912583492}
   - component: {fileID: 3794855395844704909}
-  m_Layer: 6
+  m_Layer: 5
   m_Name: Oxygen Bar Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -141,7 +141,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: 1236440391
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!114 &6001605063912583492
@@ -183,7 +183,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
 --- !u!1 &8315864715023871511
 GameObject:
   m_ObjectHideFlags: 0
@@ -303,7 +303,7 @@ GameObject:
   - component: {fileID: 742353712835566496}
   - component: {fileID: 7667379282935891827}
   - component: {fileID: 7342001745844916020}
-  m_Layer: 6
+  m_Layer: 5
   m_Name: Oxygen Bar Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}

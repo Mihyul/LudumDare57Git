@@ -5,11 +5,9 @@ namespace MovementSystem
     [RequireComponent(typeof(Rigidbody2D))]
     public class MovementController : MonoBehaviour
     {
-        [SerializeField] private float _maxSpeed;
+        [SerializeField] private float _movementSpeed;
         [SerializeField] private float _acceleration;
         [SerializeField] private float _deceleration;
-        [SerializeField] private Transform torso;
-        [SerializeField] private Transform body;
         [SerializeField] private Animator animator;
 
         private Rigidbody2D _rigidbody;
@@ -25,39 +23,38 @@ namespace MovementSystem
             _animatorSwimmingHash = Animator.StringToHash("IsSwimming");
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (_targetVelocity == Vector2.zero)
             {
                 if (_rigidbody.velocity != Vector2.zero)
                 {
-                    _rigidbody.velocity = Vector2.MoveTowards(_rigidbody.velocity, Vector2.zero, _deceleration * Time.deltaTime);
+                    _rigidbody.velocity = Vector2.MoveTowards(_rigidbody.velocity, Vector2.zero, _deceleration * Time.fixedDeltaTime);
                 }
             }
             else
             {
-                float angle = Mathf.MoveTowardsAngle(body.eulerAngles.z, _targetAngle, 200.0f * Time.deltaTime);
-                body.eulerAngles = new(0f, 0f, angle);
+                _rigidbody.rotation = Mathf.MoveTowardsAngle(_rigidbody.rotation, _targetAngle, 200.0f * Time.fixedDeltaTime);
 
                 if (_rigidbody.velocity != _targetVelocity)
                 {
-                    _rigidbody.velocity = Vector2.MoveTowards(_rigidbody.velocity, _targetVelocity, _acceleration * Time.deltaTime);
+                    _rigidbody.velocity = Vector2.MoveTowards(_rigidbody.velocity, _targetVelocity, _acceleration * Time.fixedDeltaTime);
                 }
             }
         }
 
         public void Move(Vector2 direction)
         {
-            _targetVelocity = direction * _maxSpeed;
-            _targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            _targetVelocity = direction * _movementSpeed;
+            _targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90.0f;
             
             if (direction.x < -0.01f)
             {
-                torso.localScale = new Vector3(1.0f, -1.0f, 1.0f);
+                transform.localScale = new(-1.0f, 1.0f, 1.0f);
             }
             else if(direction.x > 0.01f)
             {
-                torso.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                transform.localScale = new(1.0f, 1.0f, 1.0f);
             }
 
             if (direction.magnitude > 0f)
